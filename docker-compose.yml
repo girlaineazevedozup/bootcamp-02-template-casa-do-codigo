@@ -1,0 +1,29 @@
+version: '3.3'
+
+networks: 
+  mysql-network:
+    driver: bridge
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: 'casadocodigo'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - mysql-network
+  adminer:
+    image: adminer
+    ports:
+      - '8080:8080'
+    networks:
+      - mysql-network
+volumes:
+  my-db: 
