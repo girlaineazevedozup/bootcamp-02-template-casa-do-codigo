@@ -5,11 +5,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 public class Autor {
 
+    @Deprecated
     public Autor(){
     }
 
@@ -29,6 +29,7 @@ public class Autor {
 
     @NotBlank
     @Email
+    @Column(unique=true)
     private String email;
 
     @NotBlank
