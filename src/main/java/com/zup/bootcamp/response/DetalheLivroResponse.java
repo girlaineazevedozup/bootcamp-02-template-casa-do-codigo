@@ -1,10 +1,8 @@
 package com.zup.bootcamp.response;
 
-import com.zup.bootcamp.model.Autor;
 import com.zup.bootcamp.model.Livro;
 
 import java.math.BigDecimal;
-import java.time.format.DateTimeFormatter;
 
 public class DetalheLivroResponse {
 

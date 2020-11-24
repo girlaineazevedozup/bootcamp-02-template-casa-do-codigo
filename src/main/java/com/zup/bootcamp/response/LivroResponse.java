@@ -12,4 +12,12 @@ public class LivroResponse {
         this.id = id;
         this.titulo = titulo;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
 }
