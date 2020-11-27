@@ -1,11 +1,13 @@
 package com.zup.bootcamp.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 @Entity
 public class Livro {
@@ -33,6 +35,7 @@ public class Livro {
     private BigDecimal preco;
 
     @Min(100)
+    @JsonProperty("numero_paginas")
     private int numeroPaginas;
 
     @NotBlank
@@ -40,6 +43,7 @@ public class Livro {
     private String isbn;
 
     @Future
+    @JsonProperty("data_publicacao")
     private LocalDate dataPublicacao;
 
     @NotNull
@@ -75,9 +79,9 @@ public class Livro {
                 ", resumo='" + resumo + '\'' +
                 ", sumario='" + sumario + '\'' +
                 ", preco=" + preco +
-                ", numeroPaginas=" + numeroPaginas +
+                ", numero_paginas=" + numeroPaginas +
                 ", isbn='" + isbn + '\'' +
-                ", dataPublicacao=" + dataPublicacao +
+                ", data_publicacao=" + dataPublicacao +
                 ", autor=" + autor +
                 ", categoria=" + categoria +
                 '}';
@@ -115,7 +119,20 @@ public class Livro {
         return autor;
     }
 
-    public String getDataPublicacaoFormatada(String pattern) {
-        return dataPublicacao.format(DateTimeFormatter.ofPattern(pattern));
+    public LocalDate getDataPublicacao() {
+        return dataPublicacao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Livro livro = (Livro) o;
+        return isbn.equals(livro.isbn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn);
     }
 }

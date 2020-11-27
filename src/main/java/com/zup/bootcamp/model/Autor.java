@@ -1,5 +1,7 @@
 package com.zup.bootcamp.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -36,6 +38,7 @@ public class Autor {
     @Size(max = 400)
     private String descricao;
 
+    @JsonProperty("instante_inclusao")
     private LocalDateTime instanteInclusao = LocalDateTime.now();
 
     public Long getId() {
@@ -65,7 +68,7 @@ public class Autor {
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 ", descricao='" + descricao + '\'' +
-                ", instanteInclusao=" + instanteInclusao +
+                ", instante_inclusao=" + instanteInclusao +
                 '}';
     }
 }

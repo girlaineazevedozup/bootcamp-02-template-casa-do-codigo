@@ -1,6 +1,6 @@
 package com.zup.bootcamp.validation;
 
-import com.zup.bootcamp.validation.annotation.ExistsId;
+import com.zup.bootcamp.validation.annotation.ExistsValue;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-public class ExistsIdValidator implements ConstraintValidator<ExistsId, Object> {
+public class ExistsValueValidator implements ConstraintValidator<ExistsValue, Object> {
 
     private String domainAttribute;
     private Class<?> klass;
@@ -19,7 +19,7 @@ public class ExistsIdValidator implements ConstraintValidator<ExistsId, Object> 
     private EntityManager manager;
 
     @Override
-    public void initialize(ExistsId params) {
+    public void initialize(ExistsValue params) {
         domainAttribute = params.fieldName();
         klass = params.domainClass();
     }

@@ -1,9 +1,9 @@
 package com.zup.bootcamp.request;
 
-import com.zup.bootcamp.model.Compra;
-import com.zup.bootcamp.model.Estado;
-import com.zup.bootcamp.model.Pais;
-import com.zup.bootcamp.validation.annotation.ExistsId;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.zup.bootcamp.infrastructure.CupomRepository;
+import com.zup.bootcamp.model.*;
+import com.zup.bootcamp.validation.annotation.ExistsValue;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.util.Assert;
@@ -13,6 +13,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class CompraRequest {
 
@@ -39,10 +41,12 @@ public class CompraRequest {
     private String cidade;
 
     @NotNull
-    @ExistsId(domainClass = Pais.class, fieldName = "id")
+    @ExistsValue(domainClass = Pais.class, fieldName = "id")
+    @JsonProperty("id_pais")
     private Long idPais;
 
-    @ExistsId(domainClass = Estado.class, fieldName = "id")
+    @ExistsValue(domainClass = Estado.class, fieldName = "id")
+    @JsonProperty("id_estado")
     private Long idEstado;
 
     @NotBlank
@@ -55,10 +59,14 @@ public class CompraRequest {
     @NotNull
     private PedidoRequest pedido;
 
+    @JsonProperty("codigo_cupom")
+    @ExistsValue(domainClass = Cupom.class, fieldName = "codigo")
+    private String codigoCupom;
+
     public CompraRequest(@Email @NotBlank String email, @NotBlank String nome,
                          @NotBlank String sobrenome, @NotBlank String documento,
                          @NotBlank String endereco, @NotBlank String complemento,
-                         @NotBlank String cidade, @NotNull Long idPais, Long idEstado,
+                         @NotBlank String cidade, @NotNull Long idPais,
                          @NotBlank String telefone, @NotBlank String cep,
                          @Valid @NotNull PedidoRequest pedido) {
         super();
@@ -70,7 +78,6 @@ public class CompraRequest {
         this.complemento = complemento;
         this.cidade = cidade;
         this.idPais = idPais;
-        this.idEstado = idEstado;
         this.telefone = telefone;
         this.cep = cep;
         this.pedido = pedido;
@@ -119,22 +126,44 @@ public class CompraRequest {
         return idEstado;
     }
 
+    public void setIdEstado(Long idEstado) {
+        this.idEstado = idEstado;
+    }
+
+    public void setCodigoCupom(String codigoCupom) {
+        this.codigoCupom = codigoCupom;
+    }
+
     public PedidoRequest getPedido() {
         return pedido;
     }
 
-    public Compra toModel(EntityManager manager) {
+    public Compra toModel(EntityManager manager, CupomRepository cupomRepository){
         @NotNull Pais pais = manager.find(Pais.class, idPais);
-        Compra compra = new Compra(email, nome, sobrenome, documento, endereco, complemento, pais,
-                telefone, cep);
 
-        if(idEstado != null)
+        Function<Compra, Pedido> funcaoCriacaoPedido = pedido.toModel(manager);
+
+        Compra compra = new Compra(email, nome, sobrenome, documento, endereco, complemento, pais,
+                telefone, cep, funcaoCriacaoPedido);
+
+        if(temEstado())
             compra.setEstado(manager.find(Estado.class, idEstado));
+
+        if(temCupomDesconto())
+            compra.aplicaCupom(cupomRepository.findByCodigo(codigoCupom));
 
         return compra;
     }
 
     public boolean temEstado() {
-        return idEstado != null;
+        return Optional.ofNullable(idEstado).isPresent();
+    }
+
+    public boolean temCupomDesconto() {
+        return Optional.ofNullable(codigoCupom).isPresent();
+    }
+
+    public Optional<String> getCodigoCupom(){
+        return Optional.ofNullable(codigoCupom);
     }
 }

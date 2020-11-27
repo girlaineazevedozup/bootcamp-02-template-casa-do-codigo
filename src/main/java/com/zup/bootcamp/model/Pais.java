@@ -40,4 +40,8 @@ public class Pais {
 
         return nome.equals(pais.nome);
     }
+
+    public String getNome() {
+        return nome;
+    }
 }

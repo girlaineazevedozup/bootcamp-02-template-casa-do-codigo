@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface UniqueValue {
 
-	String message() default "{com.zup.bootcamp.beanvalidation.uniquevalue}";
+	String message() default "Valor já existe.";
 
 	Class<?>[] groups() default {};
 

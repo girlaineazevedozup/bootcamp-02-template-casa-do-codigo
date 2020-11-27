@@ -1,8 +1,9 @@
 package com.zup.bootcamp.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zup.bootcamp.model.Estado;
 import com.zup.bootcamp.model.Pais;
-import com.zup.bootcamp.validation.annotation.ExistsId;
+import com.zup.bootcamp.validation.annotation.ExistsValue;
 import com.zup.bootcamp.validation.annotation.UniqueValue;
 
 import javax.persistence.EntityManager;
@@ -16,7 +17,8 @@ public class EstadoRequest {
     private String nome;
 
     @NotNull
-    @ExistsId(domainClass = Pais.class, fieldName = "id")
+    @ExistsValue(domainClass = Pais.class, fieldName = "id")
+    @JsonProperty("id_pais")
     private Long idPais;
 
     public EstadoRequest(@NotBlank String nome, @NotNull Long idPais) {

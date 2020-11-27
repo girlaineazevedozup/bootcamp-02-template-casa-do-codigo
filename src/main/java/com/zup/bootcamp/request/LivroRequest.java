@@ -2,10 +2,11 @@ package com.zup.bootcamp.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zup.bootcamp.model.Autor;
 import com.zup.bootcamp.model.Categoria;
 import com.zup.bootcamp.model.Livro;
-import com.zup.bootcamp.validation.annotation.ExistsId;
+import com.zup.bootcamp.validation.annotation.ExistsValue;
 import com.zup.bootcamp.validation.annotation.UniqueValue;
 import org.springframework.util.Assert;
 
@@ -32,6 +33,7 @@ public class LivroRequest {
 
     @NotNull
     @Min(100)
+    @JsonProperty("numero_paginas")
     private int numeroPaginas;
 
     @NotBlank
@@ -40,14 +42,17 @@ public class LivroRequest {
 
     @Future
     @JsonFormat(pattern = "dd/MM/yyyy", shape = Shape.STRING)
+    @JsonProperty("data_publicacao")
     private LocalDate dataPublicacao;
 
     @NotNull
-    @ExistsId(domainClass = Categoria.class, fieldName = "id")
+    @ExistsValue(domainClass = Categoria.class, fieldName = "id")
+    @JsonProperty("id_categoria")
     private Long idCategoria;
 
     @NotNull
-    @ExistsId(domainClass = Autor.class, fieldName = "id")
+    @ExistsValue(domainClass = Autor.class, fieldName = "id")
+    @JsonProperty("id_autor")
     private Long idAutor;
 
     public LivroRequest(@NotBlank String titulo, @NotBlank @Size(max = 500) String resumo,

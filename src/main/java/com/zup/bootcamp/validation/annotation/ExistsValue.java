@@ -1,6 +1,6 @@
 package com.zup.bootcamp.validation.annotation;
 
-import com.zup.bootcamp.validation.ExistsIdValidator;
+import com.zup.bootcamp.validation.ExistsValueValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,12 +12,12 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = ExistsIdValidator.class)
+@Constraint(validatedBy = ExistsValueValidator.class)
 @Target({ FIELD })
 @Retention(RUNTIME)
-public @interface ExistsId {
+public @interface ExistsValue {
 
-	String message() default "{com.zup.bootcamp.beanvalidation.existsId}";
+	String message() default "Valor não existe.";
 
 	Class<?>[] groups() default {};
 
